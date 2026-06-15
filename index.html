@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eugen & Alina — 1 Septembrie 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #0a0a0a;
+      --black2:  #1a1a1a;
+      --white:   #ffffff;
+      --off:     #f7f5f1;
+      --gray:    #6b6b6b;
+      --lgray:   #d0ccc5;
+      --line:    rgba(10,10,10,.1);
+    }
+
+    html { scroll-behavior: smooth; }
+    body  { font-family: 'Montserrat', sans-serif; background: var(--white); color: var(--black); overflow-x: hidden; }
+
+    /* ─── SCROLL REVEAL ─── */
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity .8s cubic-bezier(.22,1,.36,1), transform .8s cubic-bezier(.22,1,.36,1);
+    }
+    [data-reveal].visible { opacity: 1; transform: none; }
+    [data-reveal][data-delay="1"] { transition-delay: .1s; }
+    [data-reveal][data-delay="2"] { transition-delay: .2s; }
+    [data-reveal][data-delay="3"] { transition-delay: .35s; }
+    [data-reveal][data-delay="4"] { transition-delay: .5s; }
+    [data-reveal][data-delay="5"] { transition-delay: .65s; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.3rem 3rem;
+      transition: background .5s, backdrop-filter .5s, box-shadow .5s;
+    }
+    nav.solid {
+      background: rgba(255,255,255,.95);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 1px 0 var(--line);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem; font-style: italic;
+      color: var(--white); text-decoration: none;
+      transition: color .4s;
+    }
+    nav.solid .nav-logo { color: var(--black); }
+    .nav-links { display: flex; gap: 2.2rem; list-style: none; }
+    .nav-links a {
+      font-size: .65rem; letter-spacing: .22em; text-transform: uppercase;
+      color: rgba(255,255,255,.75); text-decoration: none; transition: color .3s;
+    }
+    nav.solid .nav-links a { color: var(--gray); }
+    .nav-links a:hover { color: var(--white) !important; }
+    nav.solid .nav-links a:hover { color: var(--black) !important; }
+
+    @media (max-width: 680px) { nav { padding: 1rem 1.4rem; } .nav-links { display: none; } }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative; height: 100vh; min-height: 640px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+
+    .hero-photo {
+      position: absolute; inset: 0;
+      background: url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1920&q=85') center 40% / cover no-repeat;
+      transform: scale(1.08);
+      transition: transform 12s ease-out;
+      will-change: transform;
+    }
+    .hero-photo.pan { transform: scale(1) translateY(-2%); }
+
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        160deg,
+        rgba(0,0,0,.62) 0%,
+        rgba(0,0,0,.4)  45%,
+        rgba(0,0,0,.72) 100%
+      );
+    }
+
+    .petals { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 1; }
+    .petal {
+      position: absolute; top: -20px;
+      width: 8px; height: 8px;
+      border-radius: 50% 0;
+      background: rgba(255,255,255,.18);
+      animation: fall linear infinite;
+    }
+    @keyframes fall {
+      to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+
+    .hero-inner {
+      position: relative; z-index: 2;
+      text-align: center; padding: 2rem;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      border: 1px solid rgba(255,255,255,.3);
+      padding: .45rem 1.5rem;
+      font-size: .62rem; letter-spacing: .4em; text-transform: uppercase;
+      color: rgba(255,255,255,.65);
+      margin-bottom: 2.2rem;
+      opacity: 0; animation: fadeIn 1s 1.2s forwards;
+    }
+
+    .hero-names {
+      overflow: hidden;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1;
+    }
+    .name-line {
+      display: block;
+      font-size: clamp(4rem, 12vw, 9rem);
+      transform: translateY(110%);
+      animation: slideUp .9s cubic-bezier(.22,1,.36,1) forwards;
+    }
+    .name-line:nth-child(1) { animation-delay: .3s; }
+    .name-line:nth-child(2) { animation-delay: .55s; font-size: clamp(1.8rem, 5vw, 3.5rem); color: rgba(255,255,255,.45); font-style: italic; margin: .1em 0; }
+    .name-line:nth-child(3) { animation-delay: .7s; }
+
+    @keyframes slideUp { to { transform: translateY(0); } }
+    @keyframes fadeIn  { to { opacity: 1; } }
+
+    .hero-sep {
+      display: flex; align-items: center; justify-content: center; gap: 1rem;
+      margin: 2rem auto;
+      opacity: 0; animation: fadeIn .8s 1.4s forwards;
+    }
+    .hero-sep-line { width: 50px; height: 1px; background: rgba(255,255,255,.3); }
+    .hero-sep span { font-size: .62rem; letter-spacing: .35em; text-transform: uppercase; color: rgba(255,255,255,.55); }
+
+    .hero-date-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      font-style: italic; color: rgba(255,255,255,.8);
+      opacity: 0; animation: fadeIn .8s 1.6s forwards;
+    }
+
+    .hero-scroll {
+      position: absolute; bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%); z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: .5rem;
+      opacity: 0; animation: fadeIn 1s 2.2s forwards;
+    }
+    .hero-scroll-line {
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,.4));
+      animation: extendLine 1.5s 2.5s ease-out forwards;
+      transform-origin: top; transform: scaleY(0);
+    }
+    @keyframes extendLine { to { transform: scaleY(1); } }
+    .hero-scroll span { font-size: .58rem; letter-spacing: .3em; text-transform: uppercase; color: rgba(255,255,255,.4); }
+
+    /* ─── COUNTDOWN ─── */
+    .sec-cd {
+      background: var(--black);
+      padding: 5.5rem 1.5rem;
+      text-align: center;
+    }
+    .cd-eyebrow { font-size: .6rem; letter-spacing: .4em; text-transform: uppercase; color: rgba(255,255,255,.3); margin-bottom: 1rem; display: block; }
+    .cd-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.6rem, 4vw, 2.8rem); font-weight: 300; font-style: italic;
+      color: var(--white); margin-bottom: 3.5rem;
+    }
+    .cd-flex {
+      display: flex; justify-content: center;
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .cd-unit {
+      flex: 1; max-width: 200px;
+      padding: 3rem 1rem;
+      border-right: 1px solid rgba(255,255,255,.08);
+      position: relative;
+    }
+    .cd-unit:last-child { border-right: none; }
+    .cd-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.5rem, 8vw, 6rem); font-weight: 300;
+      color: var(--white); line-height: 1; display: block;
+      transition: transform .15s;
+    }
+    .cd-num.bump { transform: scale(1.12); }
+    .cd-lbl { font-size: .58rem; letter-spacing: .3em; text-transform: uppercase; color: rgba(255,255,255,.28); margin-top: .6rem; display: block; }
+
+    @media (max-width: 500px) { .cd-unit { padding: 2rem .5rem; } }
+
+    /* ─── GENERIC SECTION ─── */
+    .sec { padding: 7rem 1.5rem; }
+    .sec-sm { padding: 5rem 1.5rem; }
+    .inner { max-width: 940px; margin: 0 auto; }
+    .center { text-align: center; }
+
+    .eyebrow { font-size: .6rem; letter-spacing: .4em; text-transform: uppercase; color: var(--gray); display: block; margin-bottom: 1.2rem; }
+    .title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 300;
+      color: var(--black); line-height: 1.1;
+    }
+    .title em { font-style: italic; }
+    .rule { width: 44px; height: 1px; background: rgba(10,10,10,.2); margin: 2rem auto; }
+    .rule.left { margin-left: 0; }
+    .body { font-size: .88rem; line-height: 2; color: var(--gray); font-weight: 300; max-width: 560px; margin: 0 auto; }
+
+    /* ─── CAROUSEL ─── */
+    .carousel-sec { background: var(--black); padding: 0; }
+
+    .carousel-wrap {
+      position: relative;
+      width: 100%; height: 92vh; min-height: 540px;
+      overflow: hidden;
+    }
+
+    .carousel-slide {
+      position: absolute; inset: 0;
+      opacity: 0; z-index: 1;
+      transition: opacity .9s ease;
+    }
+    .carousel-slide.active { opacity: 1; z-index: 2; }
+
+    .carousel-slide img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      transform: scale(1.06);
+      transition: transform 6s ease-out;
+    }
+    .carousel-slide.active img { transform: scale(1); }
+
+    .carousel-slide::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,.1) 0%, rgba(0,0,0,.45) 100%);
+      pointer-events: none;
+    }
+
+    .car-btn {
+      position: absolute; top: 50%; z-index: 10;
+      transform: translateY(-50%);
+      width: 50px; height: 50px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.25);
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background .25s;
+    }
+    .car-btn:hover { background: rgba(255,255,255,.22); }
+    .car-btn svg { width: 20px; height: 20px; stroke: #fff; fill: none; stroke-width: 1.5; }
+    .car-prev { left: 1.5rem; }
+    .car-next { right: 1.5rem; }
+
+    .car-dots {
+      position: absolute; bottom: 1.6rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; gap: .55rem; z-index: 10;
+    }
+    .car-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,255,255,.3);
+      border: none; padding: 0; cursor: pointer;
+      transition: background .3s, width .3s, border-radius .3s;
+    }
+    .car-dot.on { background: #fff; width: 24px; border-radius: 3px; }
+
+    .car-progress {
+      position: absolute; bottom: 0; left: 0; z-index: 10;
+      height: 2px; background: rgba(255,255,255,.5);
+      width: 0; transition: width linear;
+    }
+
+    .car-counter {
+      position: absolute; bottom: 1.5rem; right: 1.8rem; z-index: 10;
+      font-size: .6rem; letter-spacing: .2em;
+      color: rgba(255,255,255,.4);
+    }
+
+    @media (max-width: 600px) {
+      .carousel-wrap { height: 72vh; }
+      .car-btn { width: 38px; height: 38px; }
+    }
+
+    /* ─── AGENDA ─── */
+    .sec-agenda { background: var(--off); }
+
+    .agenda-title-big {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(1.5rem, 5vw, 2.6rem);
+      font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--black); text-align: left; margin-bottom: 3.5rem;
+    }
+
+    .agenda { max-width: 680px; margin: 0 auto; position: relative; }
+
+    .agenda::before {
+      content: ''; position: absolute;
+      left: 108px; top: 0; bottom: 0;
+      width: 1px; background: var(--lgray);
+    }
+
+    .a-item {
+      display: grid; grid-template-columns: 108px 1fr;
+      gap: 0; padding: 0 0 3.2rem;
+      opacity: 0; transform: translateY(18px);
+      transition: opacity .65s, transform .65s;
+    }
+    .a-item.visible { opacity: 1; transform: none; }
+    .a-item:last-child { padding-bottom: 0; }
+
+    .a-left {
+      display: flex; align-items: flex-start;
+      justify-content: flex-end;
+      padding-right: 0; padding-top: .05rem;
+      position: relative;
+    }
+
+    .a-time {
+      font-size: 1rem; font-weight: 700; color: var(--black);
+      letter-spacing: .04em; line-height: 1;
+      padding: .28rem .7rem; background: transparent;
+      border-radius: 3px; transition: background .3s;
+    }
+    .a-item:first-child .a-time { background: var(--black); color: var(--white); }
+
+    .a-dot {
+      position: absolute; right: -5px; top: .28rem;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--black); border: 2px solid var(--off);
+      z-index: 1;
+    }
+
+    .a-body { padding-left: 2rem; padding-top: 0; }
+
+    .a-name {
+      font-size: .78rem; font-weight: 700;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--black); margin-bottom: .7rem; line-height: 1.3;
+    }
+
+    .a-desc {
+      font-size: .86rem; color: #555;
+      font-weight: 300; line-height: 1.85; max-width: 480px;
+    }
+
+    /* ─── LOCATION ─── */
+    .loc-wrap {
+      display: grid; grid-template-columns: 1fr 1fr;
+      min-height: 560px; margin-top: 0;
+    }
+    @media (max-width: 760px) { .loc-wrap { grid-template-columns: 1fr; } }
+
+    .loc-photo { position: relative; overflow: hidden; min-height: 420px; }
+    .loc-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      transform: scale(1.04);
+      transition: transform 1.2s cubic-bezier(.22,1,.36,1);
+    }
+    .loc-photo:hover img { transform: scale(1); }
+    .loc-photo::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(0,0,0,.18) 0%, rgba(0,0,0,.05) 100%);
+      pointer-events: none;
+    }
+
+    .loc-info {
+      background: var(--black);
+      display: flex; flex-direction: column;
+      justify-content: center;
+      padding: 4rem 3.5rem;
+    }
+    @media (max-width: 760px) { .loc-info { padding: 3rem 2rem; } }
+
+    .loc-venue {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 5vw, 3.6rem);
+      font-style: italic; font-weight: 300;
+      color: var(--white); line-height: 1.05; margin-bottom: .6rem;
+    }
+    .loc-addr { font-size: .78rem; color: rgba(255,255,255,.4); letter-spacing: .08em; margin-bottom: 2.5rem; font-weight: 300; }
+    .loc-divider { width: 36px; height: 1px; background: rgba(255,255,255,.2); margin-bottom: 2.5rem; }
+    .loc-row { display: flex; gap: 1.2rem; margin-bottom: 1rem; align-items: baseline; }
+    .loc-tag { font-size: .58rem; letter-spacing: .25em; text-transform: uppercase; color: rgba(255,255,255,.35); min-width: 48px; flex-shrink: 0; }
+    .loc-val { font-size: .88rem; color: rgba(255,255,255,.85); font-weight: 300; }
+
+    .btn {
+      display: inline-block; margin-top: 2.5rem;
+      padding: .85rem 2rem;
+      border: 1px solid rgba(255,255,255,.3); color: var(--white);
+      text-decoration: none; font-size: .64rem; letter-spacing: .22em;
+      text-transform: uppercase; font-weight: 500;
+      transition: background .25s, border-color .25s;
+      align-self: flex-start;
+    }
+    .btn:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.6); }
+
+    /* ─── ENTERTAINMENT ─── */
+    @keyframes floatLogo {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-8px); }
+    }
+    .ent-row {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: rgba(255,255,255,.06);
+      margin-top: 3.5rem;
+    }
+    @media (max-width: 560px) { .ent-row { grid-template-columns: 1fr 1fr; } }
+    .ent-card {
+      background: #111; padding: 3.2rem 2rem 3rem; text-align: center;
+      position: relative; overflow: hidden;
+      transition: background .4s; cursor: default;
+    }
+    .ent-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(160deg, rgba(255,255,255,.03) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .ent-card:hover { background: #181818; }
+    .ent-icon {
+      font-size: 2.6rem; display: block; margin-bottom: 1.4rem;
+      animation: floatLogo 5s ease-in-out infinite;
+    }
+    .ent-card:nth-child(1) .ent-icon { animation-delay: 0s; }
+    .ent-card:nth-child(2) .ent-icon { animation-delay: .8s; }
+    .ent-card:nth-child(3) .ent-icon { animation-delay: 1.6s; }
+    .ent-card:nth-child(4) .ent-icon { animation-delay: 2.4s; }
+    .ent-card:nth-child(5) .ent-icon { animation-delay: 3.2s; }
+    .ent-card:nth-child(6) .ent-icon { animation-delay: 4.0s; }
+    .ent-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem; font-style: italic; color: #f0ede8; line-height: 1.25;
+    }
+    .ent-sub { font-size: .63rem; letter-spacing: .16em; text-transform: uppercase; color: rgba(255,255,255,.3); margin-top: .6rem; font-weight: 300; }
+
+    /* ─── DRESSCODE ─── */
+    .sec-dress { background: var(--black); }
+    .sec-dress .eyebrow { color: rgba(255,255,255,.3); }
+    .sec-dress .title   { color: var(--white); }
+    .sec-dress .body    { color: rgba(255,255,255,.45); }
+    .sec-dress .rule    { background: rgba(255,255,255,.12); }
+
+    .dress-avoid {
+      max-width: 500px; margin: 0 auto;
+      border-top: 1px solid rgba(255,255,255,.07);
+      padding-top: 2.2rem;
+      text-align: left; display: flex; gap: 1rem; align-items: flex-start;
+    }
+    .dress-avoid span { font-size: 1.3rem; flex-shrink: 0; }
+    .dress-avoid p { font-size: .78rem; line-height: 1.85; color: rgba(255,255,255,.32); font-weight: 300; }
+    .dress-avoid strong { color: rgba(255,255,255,.58); font-weight: 500; }
+
+    /* ─── RSVP ─── */
+    .sec-rsvp { background: var(--off); }
+
+    .form-wrap { max-width: 560px; margin: 3rem auto 0; }
+    .fg { margin-bottom: 1.2rem; }
+    .flabel {
+      display: block; font-size: .6rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--black); margin-bottom: .55rem; font-weight: 500;
+    }
+    .finput, .fselect {
+      width: 100%; background: var(--white);
+      border: 1px solid var(--lgray); border-radius: 0;
+      padding: .88rem 1rem; color: var(--black);
+      font-family: 'Montserrat', sans-serif; font-size: .84rem; font-weight: 300;
+      outline: none; transition: border-color .25s; -webkit-appearance: none;
+    }
+    .finput::placeholder { color: var(--lgray); }
+    .finput:focus, .fselect:focus { border-color: var(--black); }
+    .fselect option { background: var(--white); }
+
+    .familia-row {
+      display: flex; align-items: center;
+      border: 1px solid var(--lgray); background: var(--white);
+      transition: border-color .25s; margin-bottom: 1.2rem;
+    }
+    .familia-row:focus-within { border-color: var(--black); }
+    .familia-prefix {
+      padding: .88rem 1rem; font-size: .84rem; font-weight: 500;
+      color: var(--black); white-space: nowrap;
+      border-right: 1px solid var(--lgray); user-select: none;
+    }
+    .familia-input {
+      border: none !important; flex: 1;
+      font-size: .95rem !important; font-weight: 400 !important;
+    }
+    .familia-input:focus { border: none !important; outline: none; }
+
+    .sbtn {
+      width: 100%; margin-top: .5rem; padding: 1.1rem;
+      background: var(--black); border: none;
+      color: var(--white); font-family: 'Montserrat', sans-serif;
+      font-size: .7rem; font-weight: 500; letter-spacing: .28em; text-transform: uppercase;
+      cursor: pointer; transition: background .25s, transform .15s;
+    }
+    .sbtn:hover  { background: var(--black2); }
+    .sbtn:active { transform: scale(.99); }
+    .sbtn-decline {
+      width: 100%; margin-top: .7rem; padding: .9rem;
+      background: transparent; border: 1px solid var(--lgray);
+      color: var(--gray); font-family: 'Montserrat', sans-serif;
+      font-size: .65rem; font-weight: 400; letter-spacing: .22em; text-transform: uppercase;
+      cursor: pointer; transition: border-color .25s, color .25s;
+    }
+    .sbtn-decline:hover { border-color: var(--black); color: var(--black); }
+
+    .success {
+      display: none; text-align: center;
+      padding: 3.5rem 2rem; border: 1px solid var(--lgray); background: var(--white);
+    }
+    .success-icon { font-size: 2.8rem; display: block; margin-bottom: 1.2rem; animation: heartbeat 1.2s ease-in-out infinite; }
+    @keyframes heartbeat {
+      0%,100% { transform: scale(1); }
+      14%      { transform: scale(1.18); }
+      28%      { transform: scale(1); }
+      42%      { transform: scale(1.1); }
+      70%      { transform: scale(1); }
+    }
+    .success-ttl {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem; font-style: italic; color: var(--black);
+    }
+    .success p { font-size: .82rem; color: var(--gray); margin-top: .8rem; font-weight: 300; line-height: 1.9; }
+
+    /* ─── FOOTER ─── */
+    footer { background: var(--black); text-align: center; padding: 4.5rem 1.5rem; }
+    .ft-names {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem; font-style: italic; font-weight: 300;
+      color: var(--white); display: block; margin-bottom: .6rem;
+    }
+    footer p { font-size: .64rem; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.25); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">E & A</a>
+  <ul class="nav-links">
+    <li><a href="#galerie">Galerie</a></li>
+    <li><a href="#agenda">Agenda</a></li>
+    <li><a href="#locatie">Locație</a></li>
+    <li><a href="#dresscode">Dress Code</a></li>
+    <li><a href="#confirmare">Confirmare</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-photo" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="petals" id="petals"></div>
+
+  <div class="hero-inner">
+    <div class="hero-badge">Invitație de nuntă · 01.09.2026</div>
+    <h1 class="hero-names">
+      <span class="name-line">Eugen</span>
+      <span class="name-line">&amp;</span>
+      <span class="name-line">Alina</span>
+    </h1>
+    <div class="hero-sep">
+      <div class="hero-sep-line"></div>
+      <span>Madison Park</span>
+      <div class="hero-sep-line"></div>
+    </div>
+    <p class="hero-date-text">1 Septembrie 2026 · ora 17:00</p>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- COUNTDOWN -->
+<section class="sec-cd">
+  <span class="cd-eyebrow" data-reveal>Timp rămas</span>
+  <div class="cd-title" data-reveal data-delay="1">Până la marele eveniment</div>
+  <div class="cd-flex" data-reveal data-delay="2">
+    <div class="cd-unit"><span class="cd-num" id="cdZ">--</span><span class="cd-lbl">Zile</span></div>
+    <div class="cd-unit"><span class="cd-num" id="cdO">--</span><span class="cd-lbl">Ore</span></div>
+    <div class="cd-unit"><span class="cd-num" id="cdM">--</span><span class="cd-lbl">Minute</span></div>
+    <div class="cd-unit"><span class="cd-num" id="cdS">--</span><span class="cd-lbl">Secunde</span></div>
+  </div>
+</section>
+
+<!-- MESAJ -->
+<section class="sec center">
+  <div class="inner">
+    <span class="eyebrow" data-reveal>Cu drag vă invităm</span>
+    <h2 class="title" data-reveal data-delay="1"><em>Dragi prieteni și familie</em></h2>
+    <div class="rule" data-reveal data-delay="2"></div>
+    <p class="body" data-reveal data-delay="3">
+      Cu sufletele pline de bucurie, vă invităm să fiți alături de noi în ziua în care ne unim
+      destinele pentru totdeauna. Prezența voastră este cel mai frumos cadou pe care ni-l puteți oferi.
+      Vă așteptăm cu drag să sărbătorim împreună această zi de neuitat.
+    </p>
+  </div>
+</section>
+
+<!-- CARUSEL -->
+<section class="carousel-sec" id="galerie">
+  <div class="carousel-wrap" id="carWrap">
+
+    <div class="carousel-slide active"><img src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=1800&q=85" alt="" loading="eager" /></div>
+    <div class="carousel-slide">       <img src="https://images.unsplash.com/photo-1529636798458-92182e662485?auto=format&fit=crop&w=1800&q=85" alt="" loading="lazy" /></div>
+    <div class="carousel-slide">       <img src="https://images.unsplash.com/photo-1469371670807-013ccf25f16a?auto=format&fit=crop&w=1800&q=85" alt="" loading="lazy" /></div>
+    <div class="carousel-slide">       <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1800&q=85" alt="" loading="lazy" /></div>
+    <div class="carousel-slide">       <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=1800&q=85" alt="" loading="lazy" /></div>
+    <div class="carousel-slide">       <img src="https://images.unsplash.com/photo-1460978812857-470ed1c77af0?auto=format&fit=crop&w=1800&q=85" alt="" loading="lazy" /></div>
+
+    <button class="car-btn car-prev" id="carPrev" aria-label="Anterior">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button class="car-btn car-next" id="carNext" aria-label="Următor">
+      <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+
+    <div class="car-dots"     id="carDots"></div>
+    <div class="car-counter"  id="carCounter"></div>
+    <div class="car-progress" id="carProgress"></div>
+  </div>
+</section>
+
+<!-- AGENDA -->
+<section class="sec sec-agenda" id="agenda">
+  <div class="inner" style="max-width:580px; margin:0 auto;">
+    <div class="agenda-title-big" data-reveal>Agenda<br>Evenimentului</div>
+
+    <div class="agenda">
+
+      <div class="a-item">
+        <div class="a-left"><span class="a-time">17:00</span><div class="a-dot"></div></div>
+        <div class="a-body">
+          <div class="a-name">Primirea invitaților</div>
+          <div class="a-desc">Vă întâmpinăm la Madison Park cu căldură și recunoștință. Este ziua în care cei mai dragi oameni din viața noastră se adună sub același acoperiș — și asta înseamnă totul pentru noi.</div>
+        </div>
+      </div>
+
+      <div class="a-item">
+        <div class="a-left"><span class="a-time"></span><div class="a-dot"></div></div>
+        <div class="a-body">
+          <div class="a-name">Ceremonia jurămintelor</div>
+          <div class="a-desc">Momentul solemn în care ne rostim jurămintele în fața lui Dumnezeu și a voastră. Un angajament pe viață, asumat cu toată inima și cu deplină conștiință.</div>
+        </div>
+      </div>
+
+      <div class="a-item">
+        <div class="a-left"><span class="a-time"></span><div class="a-dot"></div></div>
+        <div class="a-body">
+          <div class="a-name">Sesiune foto & Cabina foto</div>
+          <div class="a-desc">Fotografii alături de miri și amintiri imediate pentru fiecare invitat. Cabina foto este disponibilă pe toată durata serii — păstrați aceste momente cu voi.</div>
+        </div>
+      </div>
+
+      <div class="a-item">
+        <div class="a-left"><span class="a-time"></span><div class="a-dot"></div></div>
+        <div class="a-body">
+          <div class="a-name">Cina festivă</div>
+          <div class="a-desc">Vă invităm la masă. Un meniu atent gândit, pregătit cu grijă pentru această seară specială. Savurați fiecare moment — seara abia începe.</div>
+        </div>
+      </div>
+
+      <div class="a-item">
+        <div class="a-left"><span class="a-time"></span><div class="a-dot"></div></div>
+        <div class="a-body">
+          <div class="a-name">Muzică live & Show</div>
+          <div class="a-desc">Muzică live de excepție — un repertoriu bogat care onorează toate generațiile prezente. De la melodii clasice la ritmuri care invită la dans, seara prinde viață.</div>
+        </div>
+      </div>
+
+      <div class="a-item">
+        <div class="a-left"><span class="a-time"></span><div class="a-dot"></div></div>
+        <div class="a-body">
+          <div class="a-name">Tăierea tortului</div>
+          <div class="a-desc">Unul dintre cele mai așteptate momente ale serii. Primul gest comun ca soț și soție, săvârșit în prezența celor mai dragi oameni din viața noastră.</div>
+        </div>
+      </div>
+
+      <div class="a-item">
+        <div class="a-left"><span class="a-time"></span><div class="a-dot"></div></div>
+        <div class="a-body">
+          <div class="a-name">Petrecere până în zori</div>
+          <div class="a-desc">Seara intră într-o nouă dimensiune. Muzica preia controlul și transformă ringul de dans într-un spațiu al bucuriei pure. Petrecerea continuă până în zori.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- LOCATIE -->
+<section id="locatie" style="overflow:hidden">
+  <div class="loc-wrap">
+    <div class="loc-photo" data-reveal>
+      <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1200&q=85" alt="Madison Park" loading="lazy" />
+    </div>
+    <div class="loc-info" data-reveal data-delay="2">
+      <span class="eyebrow" style="color:rgba(255,255,255,.35)">Unde ne întâlnim</span>
+      <div class="loc-venue">Madison Park</div>
+      <div class="loc-divider"></div>
+      <div class="loc-row"><span class="loc-tag">Data</span><span class="loc-val">1 Septembrie 2026</span></div>
+      <div class="loc-row"><span class="loc-tag">Ora</span><span class="loc-val">17:00</span></div>
+      <div class="loc-row"><span class="loc-tag">Dress</span><span class="loc-val">Ținută de seară</span></div>
+      <a class="btn" href="https://www.google.com/maps/search/Madison+Park" target="_blank" rel="noopener">Deschide în Google Maps</a>
+    </div>
+  </div>
+</section>
+
+<!-- ENTERTAINMENT -->
+<section class="sec-sm center" style="background:#0d0d0d">
+  <div class="inner">
+    <span class="eyebrow" data-reveal style="color:rgba(255,255,255,.3)">Distracție & Entertainment</span>
+    <h2 class="title" data-reveal data-delay="1" style="color:var(--white)"><em>O seară de neuitat</em></h2>
+    <div class="ent-row" data-reveal data-delay="2">
+      <div class="ent-card"><span class="ent-icon">🎻</span><div class="ent-name">Orchestră Live</div><div class="ent-sub">Muzică live de excepție</div></div>
+      <div class="ent-card"><span class="ent-icon">🎧</span><div class="ent-name">DJ</div><div class="ent-sub">Petrecere până dimineață</div></div>
+      <div class="ent-card"><span class="ent-icon">🔥</span><div class="ent-name">Dansatori</div><div class="ent-sub">Show de neuitat</div></div>
+      <div class="ent-card"><span class="ent-icon">📸</span><div class="ent-name">Selfie 360</div><div class="ent-sub">Momente din toate unghiurile</div></div>
+      <div class="ent-card"><span class="ent-icon">🎞️</span><div class="ent-name">Cabină Foto</div><div class="ent-sub">Amintiri neprețuite</div></div>
+      <div class="ent-card"><span class="ent-icon">🎬</span><div class="ent-name">Foto & Video</div><div class="ent-sub">Povești vizuale</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- DRESSCODE -->
+<section class="sec sec-dress center" id="dresscode">
+  <div class="inner">
+    <span class="eyebrow" data-reveal>Cod vestimentar</span>
+    <h2 class="title" data-reveal data-delay="1"><em>Dress Code</em></h2>
+    <div class="rule" data-reveal data-delay="2"></div>
+    <p class="body" data-reveal data-delay="3">Ne dorim o atmosferă elegantă și rafinată. Vă rugăm să veniți în ținută de seară.</p>
+    <div class="dress-avoid" data-reveal data-delay="2">
+      <span>⚪</span>
+      <p><strong>Vă rugăm frumos să nu veniți în alb</strong> — această culoare este rezervată exclusiv miresei. Vă mulțumim pentru înțelegere!</p>
+    </div>
+  </div>
+</section>
+
+<!-- RSVP -->
+<section class="sec sec-rsvp center" id="confirmare">
+  <div class="inner">
+    <span class="eyebrow" data-reveal>Confirmare prezență</span>
+    <h2 class="title" data-reveal data-delay="1"><em>Ești alături de noi?</em></h2>
+    <div class="rule" data-reveal data-delay="2"></div>
+    <p class="body" data-reveal data-delay="3">Te rugăm să confirmi prezența până pe <strong style="color:var(--black);font-weight:500">1 August 2026</strong>.</p>
+
+    <div class="form-wrap" data-reveal data-delay="2">
+      <form id="rsvpForm">
+        <div class="fg familia-row">
+          <span class="familia-prefix">Familia</span>
+          <input class="finput familia-input" type="text" id="familie" placeholder="Numele vostru" required autocomplete="family-name" />
+        </div>
+        <div class="fg">
+          <label class="flabel" for="pers">Număr de persoane</label>
+          <select class="fselect" id="pers">
+            <option value="1">1 persoană</option>
+            <option value="2" selected>2 persoane</option>
+            <option value="3">3 persoane</option>
+            <option value="4">4 persoane</option>
+            <option value="5">5+ persoane</option>
+          </select>
+        </div>
+        <button class="sbtn" type="submit">Confirmă prezența</button>
+        <button class="sbtn-decline" type="button" id="declineBtn">Nu pot fi prezent</button>
+      </form>
+      <div class="success" id="successBox">
+        <span class="success-icon">🤍</span>
+        <div class="success-ttl" id="successName">Vă mulțumim!</div>
+        <p id="successMsg">Confirmarea a fost primită cu drag.<br>Abia așteptăm să vă avem alături pe 1 Septembrie 2026!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="ft-names">Eugen & Alina</span>
+  <p>1 Septembrie 2026 &nbsp;·&nbsp; Madison Park &nbsp;·&nbsp; Cu drag vă așteptăm</p>
+</footer>
+
+<script>
+  /* ── NAV ── */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('solid', window.scrollY > 60), { passive: true });
+
+  /* ── HERO pan ── */
+  setTimeout(() => document.getElementById('heroBg').classList.add('pan'), 100);
+
+  /* ── PETALS ── */
+  const petalContainer = document.getElementById('petals');
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.style.cssText = `
+      left: ${Math.random() * 100}%;
+      width: ${4 + Math.random() * 7}px;
+      height: ${4 + Math.random() * 7}px;
+      opacity: ${0.05 + Math.random() * 0.18};
+      animation-duration: ${8 + Math.random() * 14}s;
+      animation-delay: ${Math.random() * 12}s;
+      border-radius: ${Math.random() > .5 ? '50% 0' : '50%'};
+    `;
+    petalContainer.appendChild(p);
+  }
+
+  /* ── COUNTDOWN ── */
+  const TARGET = new Date('2026-09-01T17:00:00').getTime();
+  const ids = ['cdZ','cdO','cdM','cdS'];
+  const prev = ['--','--','--','--'];
+
+  function pad(n) { return String(n).padStart(2,'0'); }
+
+  function tick() {
+    const diff = TARGET - Date.now();
+    if (diff <= 0) { ids.forEach(id => document.getElementById(id).textContent = '00'); return; }
+    const vals = [
+      pad(Math.floor(diff / 86400000)),
+      pad(Math.floor(diff % 86400000 / 3600000)),
+      pad(Math.floor(diff % 3600000  / 60000)),
+      pad(Math.floor(diff % 60000    / 1000))
+    ];
+    vals.forEach((v, i) => {
+      const el = document.getElementById(ids[i]);
+      if (v !== prev[i]) {
+        el.classList.remove('bump');
+        void el.offsetWidth;
+        el.classList.add('bump');
+        el.textContent = v;
+        prev[i] = v;
+      }
+    });
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  /* ── SCROLL REVEAL ── */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+  document.querySelectorAll('.a-item').forEach(el => io.observe(el));
+
+  /* ── CAROUSEL ── */
+  (function () {
+    const wrap    = document.getElementById('carWrap');
+    const slides  = Array.from(wrap.querySelectorAll('.carousel-slide'));
+    const dots    = document.getElementById('carDots');
+    const counter = document.getElementById('carCounter');
+    const bar     = document.getElementById('carProgress');
+    const TOTAL   = slides.length;
+    const DELAY   = 5000;
+    let cur = 0, busy = false, timer, touchX = 0;
+
+    slides.forEach((_, i) => {
+      const d = document.createElement('button');
+      d.className = 'car-dot' + (i === 0 ? ' on' : '');
+      d.addEventListener('click', () => manual(i));
+      dots.appendChild(d);
+    });
+
+    function show(n) {
+      if (busy || n === cur) return;
+      busy = true;
+      slides[cur].classList.remove('active');
+      cur = (n + TOTAL) % TOTAL;
+      slides[cur].classList.add('active');
+      dots.querySelectorAll('.car-dot').forEach((d, i) => d.classList.toggle('on', i === cur));
+      counter.textContent = `${cur + 1} / ${TOTAL}`;
+      setTimeout(() => busy = false, 950);
+    }
+
+    function next()    { show(cur + 1); }
+    function prev()    { show(cur - 1); }
+    function manual(n) { stopAuto(); show(n); startAuto(); }
+
+    function resetBar() {
+      bar.style.transition = 'none'; bar.style.width = '0%';
+      void bar.offsetWidth;
+      bar.style.transition = `width ${DELAY}ms linear`; bar.style.width = '100%';
+    }
+    function startAuto() { resetBar(); timer = setInterval(() => { next(); resetBar(); }, DELAY); }
+    function stopAuto()  { clearInterval(timer); bar.style.transition = 'none'; bar.style.width = '0%'; }
+
+    document.getElementById('carNext').addEventListener('click', () => { stopAuto(); next(); startAuto(); });
+    document.getElementById('carPrev').addEventListener('click', () => { stopAuto(); prev(); startAuto(); });
+
+    wrap.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; stopAuto(); }, { passive: true });
+    wrap.addEventListener('touchend',   e => {
+      const dx = e.changedTouches[0].clientX - touchX;
+      if (Math.abs(dx) > 40) dx < 0 ? next() : prev();
+      startAuto();
+    }, { passive: true });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') { stopAuto(); next(); startAuto(); }
+      if (e.key === 'ArrowLeft')  { stopAuto(); prev(); startAuto(); }
+    });
+
+    counter.textContent = `1 / ${TOTAL}`;
+    startAuto();
+  })();
+
+  /* ── FORM ── */
+  document.getElementById('rsvpForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const name = document.getElementById('familie').value.trim();
+    document.getElementById('successName').textContent = 'Familia ' + name + ' — Vă mulțumim!';
+    document.getElementById('successMsg').textContent = 'Confirmarea a fost primită cu drag. Abia așteptăm să vă avem alături pe 1 Septembrie 2026!';
+    this.style.display = 'none';
+    document.getElementById('successBox').style.display = 'block';
+  });
+
+  document.getElementById('declineBtn').addEventListener('click', function() {
+    const name = document.getElementById('familie').value.trim();
+    if (!name) { document.getElementById('familie').focus(); return; }
+    document.getElementById('successName').textContent = 'Familia ' + name;
+    document.getElementById('successMsg').textContent = 'Ne pare rău că nu puteți fi alături de noi. Vă mulțumim că ne-ați anunțat!';
+    document.getElementById('rsvpForm').style.display = 'none';
+    document.getElementById('successBox').style.display = 'block';
+  });
+</script>
+</body>
+</html>
